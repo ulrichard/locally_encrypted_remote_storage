@@ -62,13 +62,4 @@ git push /tmp/${extHOST}_hd/C/${extImgName}.git master
 
 read -p "Press [enter] to close the storage again ..."
 
-sudo sync
-sudo umount /tmp/${extHOST}_hd/C
-sudo cryptsetup luksClose  ${extHOST}
-sudo losetup -d /dev/${loopDevice}
-sleep 1
-sudo umount /tmp/${extHOST}_hd/A
-sudo rm -rf /tmp/${extHOST}_hd
-
-
 
