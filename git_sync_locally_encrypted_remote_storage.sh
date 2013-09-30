@@ -15,7 +15,7 @@ set -e
 #imageSize=
 #loopDevice=
 
-sh open_locally_encrypted_remote_storage.sh sync_locally_encrypted_remote_storage.sh
+sh ./open_locally_encrypted_remote_storage.sh 
 
 
 if [ ! -d /tmp/${extHOST}_hd/C/${extImgName}.git ]; then
@@ -30,5 +30,5 @@ git push /tmp/${extHOST}_hd/C/${extImgName}.git master
 
 read -p "Press [enter] to close the storage again ..."
 
-sh close_locally_encrypted_remote_storage.sh sync_locally_encrypted_remote_storage.sh
+sh ./close_locally_encrypted_remote_storage.sh 
 
