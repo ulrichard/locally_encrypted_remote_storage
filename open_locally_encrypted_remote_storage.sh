@@ -7,7 +7,7 @@
 
 set -e
 
-# the following environment variables must be set prior to calling this script:
+# the following environment variables must be exported prior to calling this script:
 #extHOST=
 #extPath=
 #extImgName=
@@ -16,7 +16,7 @@ set -e
 #loopDevice=
 
 mkdir -p /tmp/${extHOST}_hd/A
-chmod 700 /tmp/${extHOST}_hd/A
+chmod 750 /tmp/${extHOST}_hd/A
 sshfs ${extUser}@${extHOST}:${extPath} /tmp/${extHOST}_hd/A -o allow_root
 
 if [ ! -e /tmp/${extHOST}_hd/A/${extImgName}.img ]; then
@@ -49,17 +49,5 @@ sudo mkdir -p /tmp/${extHOST}_hd/C
 sudo chmod 700 /tmp/${extHOST}_hd/C
 sudo mount /dev/mapper/${extHOST} /tmp/${extHOST}_hd/C
 echo "the locally encrypted remote storage is now mounted at /tmp/${extHOST}_hd/C"
-
-if [ ! -d /tmp/${extHOST}_hd/C/${extImgName}.git ]; then
-	sudo mkdir -p /tmp/${extHOST}_hd/C/${extImgName}.git
-	sudo chown ${extUser} /tmp/${extHOST}_hd/C/${extImgName}.git
-	(cd /tmp/${extHOST}_hd/C/${extImgName}.git; git init --bare)
-else
-	git pull /tmp/${extHOST}_hd/C/${extImgName}.git master
-fi
-
-git push /tmp/${extHOST}_hd/C/${extImgName}.git master
-
-read -p "Press [enter] to close the storage again ..."
 
 

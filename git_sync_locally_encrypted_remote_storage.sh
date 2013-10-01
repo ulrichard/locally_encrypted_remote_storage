@@ -15,8 +15,6 @@ set -e
 #imageSize=
 #loopDevice=
 
-sh ./open_locally_encrypted_remote_storage.sh 
-
 
 if [ ! -d /tmp/${extHOST}_hd/C/${extImgName}.git ]; then
 	sudo mkdir -p /tmp/${extHOST}_hd/C/${extImgName}.git
@@ -28,7 +26,4 @@ fi
 
 git push /tmp/${extHOST}_hd/C/${extImgName}.git master
 
-read -p "Press [enter] to close the storage again ..."
-
-sh ./close_locally_encrypted_remote_storage.sh 
 
