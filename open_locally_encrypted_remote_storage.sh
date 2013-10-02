@@ -28,6 +28,7 @@ if [ ! -e /tmp/${extHOST}_hd/A/${extImgName}.img ]; then
 	# prepare a key file and encrypt it
 	dd if=/dev/urandom | tr -d '\n' | dd bs=1 count=64 of=key_${extHOST}_${extImgName}.txt
 	gpg -e key_${extHOST}_${extImgName}.txt
+	git add key_${extHOST}_${extImgName}.txt.gpg
 	sudo cryptsetup -c aes-xts-plain -s 512 luksFormat /tmp/${extHOST}_hd/A/${extImgName}.img key_${extHOST}_${extImgName}.txt
 	
 	sudo losetup /dev/${loopDevice} /tmp/${extHOST}_hd/A/${extImgName}.img
