@@ -14,7 +14,7 @@ set -e
 
 if [ ! -d /tmp/${extHOST}_hd/C/${extImgName}.hg ]; then
 	sudo mkdir -p /tmp/${extHOST}_hd/C/${extImgName}.hg
-	sudo chown ${extUser} /tmp/${extHOST}_hd/C/${extImgName}.hg
+	sudo chown ${USER} /tmp/${extHOST}_hd/C/${extImgName}.hg
 	(cd /tmp/${extHOST}_hd/C/${extImgName}.hg; hg init )
 else
 	hg pull /tmp/${extHOST}_hd/C/${extImgName}.hg 
