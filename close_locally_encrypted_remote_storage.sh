@@ -22,6 +22,8 @@ sudo cryptsetup luksClose  ${extHOST}
 sudo losetup -d /dev/${loopDevice}
 sleep 1
 sudo umount /tmp/${extHOST}_hd/A
+sudo rm -d /tmp/${extHOST}_hd/C
+sudo rm -d /tmp/${extHOST}_hd/A
 sudo rm -d /tmp/${extHOST}_hd
 
 
