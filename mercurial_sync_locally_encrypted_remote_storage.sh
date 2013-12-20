@@ -20,6 +20,6 @@ else
 	hg pull /tmp/${extHOST}_hd/C/${extImgName}.hg 
 fi
 
-hg push /tmp/${extHOST}_hd/C/${extImgName}.hg
+hg push --new-branch -f /tmp/${extHOST}_hd/C/${extImgName}.hg
 
 
