@@ -39,12 +39,12 @@ if [ ! -e /tmp/${extHOST}_hd/A/${extImgName}.img ]; then
 else
 	sudo losetup /dev/${loopDevice} /tmp/${extHOST}_hd/A/${extImgName}.img
 
-	gpg -d key_${extHOST}_${extImgName}.txt.gpg > key_${extHOST}_${extImgName}.txt
+	gpg -d key_${extHOST}_${extImgName}.txt.gpg > key_${extHOST}_${extImgName}.txt || true
+    sleep 1
 	sudo cryptsetup luksOpen /dev/${loopDevice} ${extHOST} < key_${extHOST}_${extImgName}.txt
 fi
 
-shred key_${extHOST}_${extImgName}.txt
-rm key_${extHOST}_${extImgName}.txt
+shred -u key_${extHOST}_${extImgName}.txt
 
 sudo mkdir -p /tmp/${extHOST}_hd/C
 sudo chmod 700 /tmp/${extHOST}_hd/C
