@@ -19,6 +19,9 @@ mkdir -p /tmp/${extHOST}_hd/A
 chmod 750 /tmp/${extHOST}_hd/A
 sshfs ${extUser}@${extHOST}:${extPath} /tmp/${extHOST}_hd/A -o allow_root
 
+keyDir=~/.locally_encrypted_remote_storage
+mkdir -p ${keyDir}
+
 if [ ! -e /tmp/${extHOST}_hd/A/${extImgName}.img ]; then
 	# prepare the disk image on the remote machine
 	ssh ${extUser}@${extHOST} "(dd if=/dev/urandom of=${extPath}/${extImgName}.img bs=1M count=${imageSize}; chmod 700 ${extPath}/${extImgName}.img)"
@@ -26,25 +29,25 @@ if [ ! -e /tmp/${extHOST}_hd/A/${extImgName}.img ]; then
 #	sudo modprobe aes
 #	sudo modprobe sha256
 	# prepare a key file and encrypt it
-	dd if=/dev/urandom | tr -d '\n' | dd bs=1 count=64 of=key_${extHOST}_${extImgName}.txt
-	gpg -e key_${extHOST}_${extImgName}.txt
-	git add key_${extHOST}_${extImgName}.txt.gpg
-	sudo cryptsetup -c aes-xts-plain -s 512 luksFormat /tmp/${extHOST}_hd/A/${extImgName}.img key_${extHOST}_${extImgName}.txt
+	dd if=/dev/urandom | tr -d '\n' | dd bs=1 count=64 of=${keyDir}/key_${extHOST}_${extImgName}.txt
+	gpg -e ${keyDir}/key_${extHOST}_${extImgName}.txt
+	git add ${keyDir}/key_${extHOST}_${extImgName}.txt.gpg
+	sudo cryptsetup -c aes-xts-plain -s 512 luksFormat /tmp/${extHOST}_hd/A/${extImgName}.img ${keyDir}/key_${extHOST}_${extImgName}.txt
 	
 	sudo losetup /dev/${loopDevice} /tmp/${extHOST}_hd/A/${extImgName}.img
 
-	sudo cryptsetup luksOpen /dev/${loopDevice} ${extHOST} < key_${extHOST}_${extImgName}.txt
+	sudo cryptsetup luksOpen /dev/${loopDevice} ${extHOST} < ${keyDir}/key_${extHOST}_${extImgName}.txt
 
 	sudo mke2fs /dev/mapper/${extHOST}
 else
 	sudo losetup /dev/${loopDevice} /tmp/${extHOST}_hd/A/${extImgName}.img
 
-	gpg -d key_${extHOST}_${extImgName}.txt.gpg > key_${extHOST}_${extImgName}.txt || true
+	gpg -d ${keyDir}/key_${extHOST}_${extImgName}.txt.gpg > ${keyDir}/key_${extHOST}_${extImgName}.txt || true
     sleep 1
-	sudo cryptsetup luksOpen /dev/${loopDevice} ${extHOST} < key_${extHOST}_${extImgName}.txt
+	sudo cryptsetup luksOpen /dev/${loopDevice} ${extHOST} < ${keyDir}/key_${extHOST}_${extImgName}.txt
 fi
 
-shred -u key_${extHOST}_${extImgName}.txt
+shred -u ${keyDir}/key_${extHOST}_${extImgName}.txt
 
 sudo mkdir -p /tmp/${extHOST}_hd/C
 sudo chmod 700 /tmp/${extHOST}_hd/C
