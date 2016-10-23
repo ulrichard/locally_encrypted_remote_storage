@@ -20,6 +20,8 @@ else
 	hg pull /tmp/${extHOST}_hd/C/${extImgName}.hg 
 fi
 
-hg push --new-branch -f /tmp/${extHOST}_hd/C/${extImgName}.hg
+repodir=${PWD}
+(cd /tmp/${extHOST}_hd/C/${extImgName}.hg; hg pull ${repodir}) 
+#hg push --new-branch -f /tmp/${extHOST}_hd/C/${extImgName}.hg
 
 
