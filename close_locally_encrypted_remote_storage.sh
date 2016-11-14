@@ -1,18 +1,8 @@
 #! /bin/bash
-# make a backup on an external box.
-# Ideas from:
-# http://www.linuxquestions.org/questions/linux-newbie-8/remote-encrypted-unattended-file-server-650280/
-# http://www.vectorspace.dk/2009/06/encrypted-partition-on-debian-5-0-with-secret-key-on-usb-stick/
-# http://www.vidarholen.net/contents/blog/?p=8
-
-#set -e
+# close the encrypted remote mount that was set up earlier with open_locally_encrypted_remote_storage.sh
 
 # the following environment variables must be set prior to calling this script:
 #extHOST=
-#extPath=
-#extImgName=
-#extUser=
-#imageSize=
 #loopDevice=
 
 

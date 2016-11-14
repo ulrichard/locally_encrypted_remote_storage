@@ -5,7 +5,7 @@
 # http://www.vectorspace.dk/2009/06/encrypted-partition-on-debian-5-0-with-secret-key-on-usb-stick/
 # http://www.vidarholen.net/contents/blog/?p=8
 
-set -e
+set -o errexit
 
 # the following environment variables must be exported prior to calling this script:
 #extHOST=
