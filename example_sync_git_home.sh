@@ -8,13 +8,14 @@ export extPath=/var/www/exampleuser/
 export extImgName=home
 export extUser=exampleuser
 export imageSize=1024 #1024MB = 1GB
-export loopDevice=loop6
+export loopDevice=$(losetup -f)
 
+PATH=$PATH:~/sourcecode/locally_encrypted_remote_storage
 
-~/sourcecode/locally_encrypted_remote_storage/open_locally_encrypted_remote_storage.sh
-~/sourcecode/locally_encrypted_remote_storage/git_sync_locally_encrypted_remote_storage.sh
+open_locally_encrypted_remote_storage.sh
+git_sync_locally_encrypted_remote_storage.sh
 
 read -p "Press [enter] to close the storage again ..."
 
-~/sourcecode/locally_encrypted_remote_storage/close_locally_encrypted_remote_storage.sh
+close_locally_encrypted_remote_storage.sh
 

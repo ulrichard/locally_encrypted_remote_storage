@@ -34,17 +34,17 @@ if [ ! -e /tmp/${extHOST}_hd/A/${extImgName}.img ]; then
 	git add ${keyDir}/key_${extHOST}_${extImgName}.txt.gpg
 	sudo cryptsetup -c aes-xts-plain -s 512 luksFormat /tmp/${extHOST}_hd/A/${extImgName}.img ${keyDir}/key_${extHOST}_${extImgName}.txt
 	
-	sudo losetup /dev/${loopDevice} /tmp/${extHOST}_hd/A/${extImgName}.img
+	sudo losetup ${loopDevice} /tmp/${extHOST}_hd/A/${extImgName}.img
 
-	sudo cryptsetup luksOpen /dev/${loopDevice} ${extHOST} < ${keyDir}/key_${extHOST}_${extImgName}.txt
+	sudo cryptsetup luksOpen ${loopDevice} ${extHOST} < ${keyDir}/key_${extHOST}_${extImgName}.txt
 
 	sudo mke2fs /dev/mapper/${extHOST}
 else
-	sudo losetup /dev/${loopDevice} /tmp/${extHOST}_hd/A/${extImgName}.img
+	sudo losetup ${loopDevice} /tmp/${extHOST}_hd/A/${extImgName}.img
 
 	gpg -d ${keyDir}/key_${extHOST}_${extImgName}.txt.gpg > ${keyDir}/key_${extHOST}_${extImgName}.txt || true
     sleep 1
-	sudo cryptsetup luksOpen /dev/${loopDevice} ${extHOST} < ${keyDir}/key_${extHOST}_${extImgName}.txt
+	sudo cryptsetup luksOpen ${loopDevice} ${extHOST} < ${keyDir}/key_${extHOST}_${extImgName}.txt
 fi
 
 shred -u ${keyDir}/key_${extHOST}_${extImgName}.txt

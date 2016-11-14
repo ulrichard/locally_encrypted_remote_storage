@@ -9,11 +9,8 @@ set -e
 
 # the following environment variables must be set prior to calling this script:
 #extHOST=
-#extPath=
 #extImgName=
 #extUser=
-#imageSize=
-#loopDevice=
 
 
 if [ ! -d /tmp/${extHOST}_hd/C/${extImgName}.git ]; then

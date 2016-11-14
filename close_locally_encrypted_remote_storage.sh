@@ -5,7 +5,7 @@
 # http://www.vectorspace.dk/2009/06/encrypted-partition-on-debian-5-0-with-secret-key-on-usb-stick/
 # http://www.vidarholen.net/contents/blog/?p=8
 
-set -e
+#set -e
 
 # the following environment variables must be set prior to calling this script:
 #extHOST=
@@ -19,7 +19,7 @@ set -e
 sudo sync
 sudo umount /tmp/${extHOST}_hd/C
 sudo cryptsetup luksClose  ${extHOST}
-sudo losetup -d /dev/${loopDevice}
+sudo losetup -d ${loopDevice}
 sleep 1
 sudo umount /tmp/${extHOST}_hd/A
 sudo rm -d /tmp/${extHOST}_hd/C
