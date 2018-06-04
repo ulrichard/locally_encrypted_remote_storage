@@ -22,16 +22,23 @@ sshfs ${extUser}@${extHOST}:${extPath} /tmp/${extHOST}_hd/A -o allow_root
 keyDir=~/.locally_encrypted_remote_storage
 mkdir -p ${keyDir}
 
+if [ -e ${keyDir}/key_${extHOST}_${extImgName}.txt.gpg ]; then
+	gpg -d ${keyDir}/key_${extHOST}_${extImgName}.txt.gpg > ${keyDir}/key_${extHOST}_${extImgName}.txt || true
+else
+	# prepare a key file and encrypt it
+	dd if=/dev/urandom | tr -d '\n' | dd bs=1 count=64 of=${keyDir}/key_${extHOST}_${extImgName}.txt
+	gpg -e ${keyDir}/key_${extHOST}_${extImgName}.txt
+	git add ${keyDir}/key_${extHOST}_${extImgName}.txt.gpg
+fi
+
+sleep 1
+
 if [ ! -e /tmp/${extHOST}_hd/A/${extImgName}.img ]; then
 	# prepare the disk image on the remote machine
 	ssh ${extUser}@${extHOST} "(dd if=/dev/urandom of=${extPath}/${extImgName}.img bs=1M count=${imageSize}; chmod 700 ${extPath}/${extImgName}.img)"
 	sudo modprobe dm-crypt
 #	sudo modprobe aes
 #	sudo modprobe sha256
-	# prepare a key file and encrypt it
-	dd if=/dev/urandom | tr -d '\n' | dd bs=1 count=64 of=${keyDir}/key_${extHOST}_${extImgName}.txt
-	gpg -e ${keyDir}/key_${extHOST}_${extImgName}.txt
-	git add ${keyDir}/key_${extHOST}_${extImgName}.txt.gpg
 	sudo cryptsetup -c aes-xts-plain -s 512 luksFormat /tmp/${extHOST}_hd/A/${extImgName}.img ${keyDir}/key_${extHOST}_${extImgName}.txt
 	
 	sudo losetup ${loopDevice} /tmp/${extHOST}_hd/A/${extImgName}.img
@@ -42,8 +49,6 @@ if [ ! -e /tmp/${extHOST}_hd/A/${extImgName}.img ]; then
 else
 	sudo losetup ${loopDevice} /tmp/${extHOST}_hd/A/${extImgName}.img
 
-	gpg -d ${keyDir}/key_${extHOST}_${extImgName}.txt.gpg > ${keyDir}/key_${extHOST}_${extImgName}.txt || true
-    sleep 1
 	sudo cryptsetup luksOpen ${loopDevice} ${extHOST} < ${keyDir}/key_${extHOST}_${extImgName}.txt
 fi
 
